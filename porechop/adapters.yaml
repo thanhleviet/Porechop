@@ -1,0 +1,26 @@
+EXP-NBD196:
+  name: EXP-NBD196
+  5p:
+      front_adapter: AGGTTAA
+      rear_adapter: CAGCACCT
+  3p:
+      front_adapter: GGTGCTG
+      rear_adapter: TTAACCTTAGCAAT
+
+EXP-PBC096:
+  name: EXP-PBC096
+  5p:
+      front_adapter: GGTGCTG
+      rear_adapter: TTAACCTTTCTGTTGGTGCTGATATTGC
+  3p:
+      front_adapter: GAAGATAGAGCGACAGGCAAGTAGGTTAA
+      rear_adapter: CAGCACC
+
+BacHIT:
+  name: BacHIT
+  5p:
+      front_adapter: GGTGCTG
+      rear_adapter: TTAACCTGTCTCGTGGGCTCGG
+  3p:
+      front_adapter: GACGCTGCCGACGAAGGTTAA
+      rear_adapter: CAGCACC

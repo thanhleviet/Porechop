@@ -16,7 +16,8 @@ not, see <http://www.gnu.org/licenses/>.
 
 from .cpp_function_wrappers import adapter_alignment
 from .misc import yellow, red, add_line_breaks_to_sequence, END_FORMATTING, RED, YELLOW
-
+from loguru import logger
+import edlib
 
 class NanoporeRead(object):
 
@@ -475,6 +476,7 @@ class NanoporeRead(object):
 
 def align_adapter(read_seq, adapter_seq, scoring_scheme_vals):
     alignment_result = adapter_alignment(read_seq, adapter_seq, scoring_scheme_vals)
+    # logger.info(alignment_result)
     result_parts = alignment_result.split(',')
     read_start = int(result_parts[0])
 

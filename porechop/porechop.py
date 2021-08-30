@@ -25,10 +25,13 @@ from multiprocessing.dummy import Pool as ThreadPool
 from collections import defaultdict
 from .misc import load_fasta_or_fastq, print_table, red, bold_underline, MyHelpFormatter, int_to_str
 from .adapters import ADAPTERS, make_full_native_barcode_adapter,\
-    make_old_full_rapid_barcode_adapter, make_new_full_rapid_barcode_adapter
+    make_old_full_rapid_barcode_adapter, make_new_full_rapid_barcode_adapter, \
+    make_full_adapter_arrangement
 from .nanopore_read import NanoporeRead
 from .version import __version__
-
+from loguru import logger
+import yaml
+from yaml.loader import SafeLoader
 
 def main():
     args = get_arguments()
@@ -47,7 +50,7 @@ def main():
         forward_or_reverse_barcodes = None
 
     display_adapter_set_results(matching_sets, args.verbosity, args.print_dest)
-    matching_sets = add_full_barcode_adapter_sets(matching_sets)
+    matching_sets = add_full_barcode_adapter_sets(matching_sets, args.kit_name)
 
     if args.verbosity > 0:
         print('\n', file=args.print_dest)
@@ -135,6 +138,11 @@ def get_arguments():
     adapter_search_group = parser.add_argument_group('Adapter search settings',
                                                      'Control how the program determines which '
                                                      'adapter sets are present')
+
+    adapter_search_group.add_argument('--kit_name', choices=['auto', 'EXP-NBD196', 'EXP-PBC096', 'BacHIT'],
+                               default='auto',
+                               help='Name of the barcode kit. '
+                               'Specify a barcode kit instead of the default auto will speed up the progress')
     adapter_search_group.add_argument('--adapter_threshold', type=float, default=90.0,
                                       help='An adapter set has to have at least this percent '
                                            'identity to be labelled as present and trimmed off '
@@ -408,29 +416,49 @@ def display_adapter_set_results(matching_sets, verbosity, print_dest):
                     fixed_col_widths=[35, 8, 8])
 
 
-def add_full_barcode_adapter_sets(matching_sets):
+def add_full_barcode_adapter_sets(matching_sets,kit_name):
     """
     This function adds some new 'full' adapter sequences based on what was already found. For
     example, if the ligation adapters and the reverse barcode adapters are found, it assumes we are
     looking at a native barcoding run and so it adds the complete native barcoding adapter
     sequences (with the barcode's upstream and downstream context included).
     """
+    with open(os.path.join(os.path.dirname(__file__),"adapters.yaml")) as adapter_file:
+        adapter_kits = yaml.load(adapter_file, Loader=SafeLoader)
+
     matching_set_names = [x.name for x in matching_sets]
 
-    for i in range(1, 97):
+    if kit_name == 'auto':
+        for i in range(1, 97):
+            # Native barcode full sequences
+            if all(x in matching_set_names
+                for x in ['SQK-NSK007', 'Barcode ' + str(i) + ' (reverse)']):
+                matching_sets.append(make_full_native_barcode_adapter(i))
+            # EXP-NBD196
+            if all(x in matching_set_names for x in ['SQK-NSK007', f'Barcode {i} (forward)']):
+                matching_sets.append(
+                    make_full_adapter_arrangement(i, adapter_kits['EXP-NBD196']))
 
-        # Native barcode full sequences
-        if all(x in matching_set_names
-               for x in ['SQK-NSK007', 'Barcode ' + str(i) + ' (reverse)']):
-            matching_sets.append(make_full_native_barcode_adapter(i))
+            # BacHIT
+            if all(x in matching_set_names for x in ['SQK-NSK007', f'Barcode {i} (forward)']):
+                matching_sets.append(make_full_adapter_arrangement(i, adapter_kits['BacHIT']))
 
-        # Rapid barcode full sequences
-        if all(x in matching_set_names
-               for x in ['Rapid', 'Barcode ' + str(i) + ' (forward)']):
-            if 'RBK004_upstream' in matching_set_names:
-                matching_sets.append(make_new_full_rapid_barcode_adapter(i))
-            elif 'SQK-NSK007' in matching_set_names:
-                matching_sets.append(make_old_full_rapid_barcode_adapter(i))
+            # EXP-PBC096
+            if all(x in matching_set_names for x in ['SQK-NSK007', f'Barcode {i} (forward)']):
+                matching_sets.append(make_full_adapter_arrangement(
+                    i, adapter_kits['EXP-PBC096']))
+
+            # Rapid barcode full sequences
+            if all(x in matching_set_names for x in ['Rapid', 'Barcode ' + str(i) + ' (forward)']):
+                if 'RBK004_upstream' in matching_set_names:
+                    matching_sets.append(make_new_full_rapid_barcode_adapter(i))
+                elif 'SQK-NSK007' in matching_set_names:
+                    matching_sets.append(make_old_full_rapid_barcode_adapter(i))
+    else:
+        for i in range(1, 97):
+            if all(x in matching_set_names for x in ['SQK-NSK007', f'Barcode {i} (forward)']):
+                matching_sets.append(
+                    make_full_adapter_arrangement(i, adapter_kits[kit_name]))
 
     return matching_sets
 
