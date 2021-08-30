@@ -142,7 +142,7 @@ def get_arguments():
     adapter_search_group.add_argument('--kit_name', choices=['auto', 'EXP-NBD196', 'EXP-PBC096', 'BacHIT'],
                                default='auto',
                                help='Name of the barcode kit. '
-                               'Specify a barcode kit instead of the default auto will speed up the progress')
+                               'Specifying a barcode kit instead of the default auto will speed up the progress')
     adapter_search_group.add_argument('--adapter_threshold', type=float, default=90.0,
                                       help='An adapter set has to have at least this percent '
                                            'identity to be labelled as present and trimmed off '

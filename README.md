@@ -4,36 +4,45 @@ Porechop is a tool for finding and removing adapters from [Oxford Nanopore](http
 
 Porechop also supports demultiplexing of Nanopore reads that were barcoded with the [Native Barcoding Kit](https://store.nanoporetech.com/native-barcoding-kit-1d.html), [PCR Barcoding Kit](https://store.nanoporetech.com/pcr-barcoding-kit-96.html) or [Rapid Barcoding Kit](https://store.nanoporetech.com/rapid-barcoding-sequencing-kit.html).
 
+# This fork 
 
-### Oct 2018 update: Porechop is officially unsupported
+- Updated full arrangement for barcode kits:
+  - EXP-NBP196
+  - EXP-PBC096
+  - BacHIT
 
-While I'm happy Porechop has so many users, it has always been a bit klugey and a pain to maintain. I don't have the time to give it the attention it deserves, so I'm going to now officially declare Porechop as abandonware (though the unanswered [issues](https://github.com/rrwick/Porechop/issues) and [pull requests](https://github.com/rrwick/Porechop/pulls) reveal that it already has been for some time). I've added a [known issues](#known-issues) section to the README to outline what I think is wrong with Porechop and how a reimplementation should look. I may someday (no promises though :stuck_out_tongue:) try to rewrite it from a blank canvas to address its faults.
-
-
-
-
-
+- New option
+  ```
+  --kit_name {auto,EXP-NBD196,EXP-PBC096,BacHIT}
+                                        Name of the barcode kit. Specifying a barcode kit instead of the default auto will speed up the progress
+  ```
 # Table of contents
 
-* [Requirements](#requirements)
-* [Installation](#installation)
-    * [Install from source](#install-from-source)
-    * [Build and run without installation](#build-and-run-without-installation)
-* [Quick usage examples](#quick-usage-examples)
-* [How it works](#how-it-works)
-    * [Find matching adapter sets](#find-matching-adapter-sets)
-    * [Trim adapters from read ends](#trim-adapters-from-read-ends)
-    * [Split reads with internal adapters](#split-reads-with-internal-adapters)
-    * [Discard reads with internal adapters](#discard-reads-with-internal-adapters)
-    * [Barcode demultiplexing](#barcode-demultiplexing)
-    * [Barcode demultiplexing with Albacore](#barcode-demultiplexing-with-albacore)
-    * [Output](#output)
-    * [Verbose output](#verbose-output)
-* [Known adapters](#known-adapters)
-* [Full usage](#full-usage)
-* [Known issues](#known-issues)
-* [Acknowledgements](#acknowledgements)
-* [License](#license)
+- [This fork](#this-fork)
+- [Table of contents](#table-of-contents)
+- [Requirements](#requirements)
+- [Installation](#installation)
+    - [Install from source](#install-from-source)
+    - [Build and run without installation](#build-and-run-without-installation)
+- [Quick usage examples](#quick-usage-examples)
+- [How it works](#how-it-works)
+    - [Find matching adapter sets](#find-matching-adapter-sets)
+    - [Trim adapters from read ends](#trim-adapters-from-read-ends)
+    - [Split reads with internal adapters](#split-reads-with-internal-adapters)
+    - [Discard reads with internal adapters](#discard-reads-with-internal-adapters)
+    - [Barcode demultiplexing](#barcode-demultiplexing)
+    - [Barcode demultiplexing with Albacore](#barcode-demultiplexing-with-albacore)
+    - [Output](#output)
+    - [Verbose output](#verbose-output)
+- [Known adapters](#known-adapters)
+- [Full usage](#full-usage)
+- [Known issues](#known-issues)
+    - [Adapter search](#adapter-search)
+    - [Performance](#performance)
+    - [Barcode demultiplexing](#barcode-demultiplexing-1)
+    - [Base-space problems](#base-space-problems)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
 
 
 
