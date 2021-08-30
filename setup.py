@@ -25,6 +25,7 @@ if not importlib.util.find_spec("setuptools"):
 
 from setuptools import setup
 from setuptools.command.install import install
+from setuptools.command.bdist_egg import bdist_egg as _bdist_egg
 
 # Get the program version from another file.
 exec(open('porechop/version.py').read())
@@ -110,6 +111,12 @@ class PorechopClean(Command):
             os.remove(delete_file)
 
 
+class Bdist_egg(_bdist_egg):
+    def run(self):
+        call(["pip install -r requirements.txt --no-clean"], shell=True)
+        _bdist_egg.run(self)
+
+
 setup(name='porechop',
       version=__version__,
       description='Porechop',
@@ -120,10 +127,9 @@ setup(name='porechop',
       license='GPL',
       packages=['porechop'],
       entry_points={"console_scripts": ['porechop = porechop.porechop:main']},
-      install_requires=['loguru',
-                        'edlib'],
       zip_safe=False,
       cmdclass={'build': PorechopBuild,
                 'install': PorechopInstall,
-                'clean': PorechopClean}
+                'clean': PorechopClean,
+                'bdist_egg': Bdist_egg}
       )
