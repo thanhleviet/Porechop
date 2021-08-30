@@ -37,6 +37,7 @@ make
 docker run --rm -it -u 1000:1000 -v $PWD:/data quadram/porechop porechop --help
 ```
 - Singularity
+  
 We can just simply convert the docker image to a singularity one
 
 ```
