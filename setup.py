@@ -121,7 +121,7 @@ setup(name='porechop',
       packages=['porechop'],
       entry_points={"console_scripts": ['porechop = porechop.porechop:main']},
       install_requires=['loguru',
-                        'edlib']
+                        'edlib'],
       zip_safe=False,
       cmdclass={'build': PorechopBuild,
                 'install': PorechopInstall,
