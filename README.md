@@ -43,6 +43,11 @@ We can just simply convert the docker image to a singularity one
 ```
 sudo singularity build porechop.sif docker://quadram/porechop
 ```
+Then
+
+```
+singularity exec porechop.sif porechop --help
+```
 
 # Table of contents
 
