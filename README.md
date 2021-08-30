@@ -6,6 +6,8 @@ Porechop also supports demultiplexing of Nanopore reads that were barcoded with 
 
 # This fork 
 
+This fork has few minor modifications for trimming new adapters like NBP196, PBC096. For deplexing and trimming adapters/barcodes, **guppy_barcoder** is highly recommended.
+## What's changed ?
 - Updated full arrangement for barcode kits:
   - EXP-NBP196
   - EXP-PBC096
@@ -16,13 +18,40 @@ Porechop also supports demultiplexing of Nanopore reads that were barcoded with 
   --kit_name {auto,EXP-NBD196,EXP-PBC096,BacHIT}
                                         Name of the barcode kit. Specifying a barcode kit instead of the default auto will speed up the progress
   ```
+
+## Installation
+
+- Run without installation
+
+Similar to the old versions from the original repo
+
+```bash
+git clone https://github.com/thanhleviet/Porechop.git
+cd Porechop
+make
+./porechop-runner.py -h
+```
+- Docker with non-root user
+
+```
+docker run --rm -it -u 1000:1000 -v $PWD:/data quadram/porechop porechop --help
+```
+- Singularity
+We can just simply convert the docker image to a singularity one
+
+```
+sudo singularity build porechop.sif docker://quadram/porechop
+```
+
 # Table of contents
 
 - [This fork](#this-fork)
+  - [What's changed ?](#whats-changed-)
+  - [Installation](#installation)
 - [Table of contents](#table-of-contents)
 - [Requirements](#requirements)
-- [Installation](#installation)
-    - [Install from source](#install-from-source)
+- [Installation](#installation-1)
+    - [Install from old source](#install-from-old-source)
     - [Build and run without installation](#build-and-run-without-installation)
 - [Quick usage examples](#quick-usage-examples)
 - [How it works](#how-it-works)
@@ -60,7 +89,7 @@ I haven't tried to make Porechop run on Windows, but it should be possible. If y
 
 #  Installation
 
-### Install from source
+### Install from old source
 
 Running the `setup.py` script will compile the C++ components of Porechop and install a `porechop` executable:
 
