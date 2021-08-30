@@ -118,18 +118,19 @@ class Bdist_egg(_bdist_egg):
 
 
 setup(name='porechop',
-      version=__version__,
-      description='Porechop',
-      long_description=LONG_DESCRIPTION,
-      url='http://github.com/rrwick/porechop',
-      author='Ryan Wick',
-      author_email='rrwick@gmail.com',
-      license='GPL',
-      packages=['porechop'],
-      entry_points={"console_scripts": ['porechop = porechop.porechop:main']},
-      zip_safe=False,
-      cmdclass={'build': PorechopBuild,
-                'install': PorechopInstall,
-                'clean': PorechopClean,
-                'bdist_egg': Bdist_egg}
+    version=__version__,
+    description='Porechop',
+    long_description=LONG_DESCRIPTION,
+    url='http://github.com/rrwick/porechop',
+    author='Ryan Wick',
+    author_email='rrwick@gmail.com',
+    license='GPL',
+    packages=['porechop'],
+    entry_points={"console_scripts": ['porechop = porechop.porechop:main']},
+    zip_safe=False,
+    include_package_data=True,
+    cmdclass={'build': PorechopBuild,
+            'install': PorechopInstall,
+            'clean': PorechopClean,
+            'bdist_egg': Bdist_egg}
       )
