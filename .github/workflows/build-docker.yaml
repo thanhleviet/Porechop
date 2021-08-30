@@ -36,7 +36,7 @@ jobs:
         name: Github checkout
         uses: actions/checkout@v2
         with:
-          ref: main
+          ref: master
       -
         name: Build and push
         id: docker_build
