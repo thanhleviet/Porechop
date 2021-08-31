@@ -9,7 +9,7 @@ Porechop also supports demultiplexing of Nanopore reads that were barcoded with 
 This fork has few minor modifications for trimming new adapters like NBP196, PBC096. For deplexing and trimming adapters/barcodes, **guppy_barcoder** is highly recommended.
 ## What's changed ?
 - Updated full arrangement for barcode kits:
-  - EXP-NBP196
+  - EXP-NBD196
   - EXP-PBC096
   - BacHIT
 
